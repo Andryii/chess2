@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import AppStyle from "./App.module.css";
 import Board from "./Board/Board";
-import { ActiveFigureContext } from "./context";
+import { ActiveFigureContext, PosibleCellContext } from "./context";
 
 function App() {
   const [posFigure, setPosFigure] = useState([
@@ -51,15 +51,37 @@ function App() {
     ],
   ]);
 
-  const [activeFigure, setActiveFigure] = useState('none')
-  
+  const [activeFigure, setActiveFigure] = useState("none");
+
+  const [posibleCell, setPosibleCell] = useState({
+    attak: [],
+    move: [],
+  });
+
+  useMemo(() => {
+    if (activeFigure == "none") {
+      setPosibleCell({
+        attak: [],
+        move: [],
+      });
+    } else {
+      setPosibleCell({
+        attak: [],
+        move: [],
+      });
+    }
+  }, [activeFigure]);
 
   return (
     <div className={AppStyle.App}>
-      <ActiveFigureContext.Provider value={{activeFigure, setActiveFigure}}>
-      <Board size={posFigure.length} cell={100} posFigure={posFigure} />
+      <ActiveFigureContext.Provider value={{ activeFigure, setActiveFigure }}>
+        <Board
+          posibleCell={posibleCell}
+          size={posFigure.length}
+          cell={100}
+          posFigure={posFigure}
+        />
       </ActiveFigureContext.Provider>
-      
     </div>
   );
 }

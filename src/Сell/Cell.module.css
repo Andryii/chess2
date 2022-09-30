@@ -6,11 +6,32 @@
   background: lightgrey;
 }
 
-.active {
-  background: lightslategray, teal;
-  background-blend-mode: multiply;
+.odd.active {
+  background: #b1c150;
 }
-.posiblemove {
+
+.even.active {
+  background: #e1e86e;
 }
-.posibleattack {
+
+.odd.posibleattak
+{
+  background-color: #9b6d8b;
 }
+
+.even.posibleattak
+{
+  background-color: #ca93a9;
+}
+
+
+.odd.posiblemove
+{
+  background-color: #83769a;
+}
+
+.even.posiblemove
+{
+  background-color: #a290ae;
+}
+
