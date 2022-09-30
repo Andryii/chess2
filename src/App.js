@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AppStyle from "./App.module.css";
 import Board from "./Board/Board";
+import { ActiveFigureContext } from "./context";
 
 function App() {
   const [posFigure, setPosFigure] = useState([
@@ -50,9 +51,15 @@ function App() {
     ],
   ]);
 
+  const [activeFigure, setActiveFigure] = useState('none')
+  
+
   return (
     <div className={AppStyle.App}>
-      <Board size={posFigure.length} cell={100} posFigure = {posFigure} />
+      <ActiveFigureContext.Provider value={{activeFigure, setActiveFigure}}>
+      <Board size={posFigure.length} cell={100} posFigure={posFigure} />
+      </ActiveFigureContext.Provider>
+      
     </div>
   );
 }

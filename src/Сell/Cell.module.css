@@ -1,9 +1,16 @@
-.odd
-{
-    background-color: lightslategray;
+.odd {
+  background: lightslategray;
 }
 
-.even
-{
-    background-color: lightgrey;
+.even {
+  background: lightgrey;
+}
+
+.active {
+  background: lightslategray, teal;
+  background-blend-mode: multiply;
+}
+.posiblemove {
+}
+.posibleattack {
 }

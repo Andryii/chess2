@@ -1,5 +1,10 @@
 
 .Board
 {
+
+}
+
+.line
+{
     display: flex;
 }

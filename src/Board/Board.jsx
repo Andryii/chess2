@@ -9,19 +9,22 @@ const Board = ({ size, cell, posFigure }) => {
     >
       {posFigure.map((line, i) => {
         return (
-          <div key={i}>
+          <div key={i} className={BoardStyle.line}>
             {line.map((mapCell, j) => {
               return (
                 <Cell
-                  key={j}
+                  key={""+i+j}
+                  id = {""+i+j}
                   cellsize={cell}
                   parity={(i % 2) - (j % 2) ? "odd" : "even"}
                   figure={mapCell}
                 />
               );
             })}
+            
           </div>
         );
+        
       })}
     </div>
   );
