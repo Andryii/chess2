@@ -95,7 +95,6 @@ let bishop = (activeFigure, posFigure, history) => {
   increment = 1;
 
   while (position.X + increment < 8) {
-    console.log(posFigure[position.Y][position.X + increment]);
     if (posFigure[position.Y][position.X + increment] == "none") {
       res.move.push("" + position.Y + (position.X + increment));
     } else if (
@@ -177,6 +176,40 @@ let rook = (activeFigure, posFigure, history) => {
     attak: [],
     move: [],
   };
+  let position = {
+    Y: Math.floor(activeFigure.position / 10),
+    X: activeFigure.position % 10,
+  };
+  let increment;
+  let XX;
+  let YY;
+  [
+    { X: -1, Y: -1 },
+    { X: 1, Y: 1 },
+    { X: -1, Y: 1 },
+    { X: 1, Y: -1 },
+  ].map((move) => {
+    increment = 1;
+    while (
+      position.X + increment * move.X >= 0 &&
+      position.X + increment * move.X < 8 &&
+      position.Y + increment * move.Y >= 0 &&
+      position.Y + increment * move.Y < 8
+    ) {
+      XX = position.X + increment * move.X;
+      YY = position.Y + increment * move.Y;
+
+      if (posFigure[YY][XX] == "none") {
+        res.move.push("" + YY + XX);
+      } else if (posFigure[YY][XX][0] != activeFigure.name[0]) {
+        res.attak.push("" + YY + XX);
+        break;
+      } else break;
+
+      increment++;
+    }
+  });
+
   return res;
 };
 let queen = (activeFigure, posFigure, history) => {
