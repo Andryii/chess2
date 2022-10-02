@@ -8,7 +8,8 @@ import {
 } from "./context";
 import getPosibleMove from "./API/getPosibleMove";
 function App() {
-  const [posFigure, setPosFigure] = useState([
+  /*Стандартное положение всех фигур 
+  [
     [
       "b_bishop",
       "b_knight",
@@ -32,7 +33,7 @@ function App() {
     ["none", "none", "none", "none", "none", "none", "none", "none"],
     ["none", "none", "none", "none", "none", "none", "none", "none"],
     ["none", "none", "none", "none", "none", "none", "none", "none"],
-    ["b_pawn", "none", "none", "none", "none", "none", "none", "none"],
+    ["none", "none", "none", "none", "none", "none", "none", "none"],
     [
       "w_pawn",
       "w_pawn",
@@ -53,6 +54,20 @@ function App() {
       "w_knight",
       "w_bishop",
     ],
+  ]
+  
+  */
+
+  //Текущая ситуация на поле
+  const [posFigure, setPosFigure] = useState([
+    ["none", "none", "none", "none", "none", "none", "none", "none"],
+    ["none", "none", "none", "none", "none", "none", "none", "none"],
+    ["none", "w_pawn", "w_pawn", "w_pawn", "w_pawn", "w_pawn", "none", "none"],
+    ["none", "w_pawn", "b_pawn", "b_bishop", "none", "w_pawn", "none", "none"],
+    ["none", "w_pawn", "none", "none", "none", "w_pawn", "none", "none"],
+    ["none", "w_pawn", "w_pawn", "w_pawn", "w_pawn", "none", "none", "none"],
+    ["none", "none", "none", "none", "none", "none", "none", "none"],
+    ["none", "none", "none", "none", "none", "none", "none", "none"],
   ]);
 
   /*

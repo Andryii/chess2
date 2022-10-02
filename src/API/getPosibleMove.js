@@ -9,11 +9,7 @@ let pawn = (activeFigure, posFigure, history) => {
   };
 
   //move logic
-  if (
-    history.some((el) => {
-      return el.start == activeFigure.position;
-    })
-  ) {
+  if (position.Y !== (activeFigure.name[0] == "b" ? 1 : 7)) {
     posFigure[position.Y + (activeFigure.name[0] == "b" ? 1 : -1)][
       position.X
     ] == "none"
@@ -44,6 +40,7 @@ let pawn = (activeFigure, posFigure, history) => {
     }
   }
 
+  //attak logic
   let positionAttak = [
     {
       Y: position.Y + (activeFigure.name[0] == "b" ? 1 : -1),
@@ -60,31 +57,120 @@ let pawn = (activeFigure, posFigure, history) => {
     att.Y >= 0 &&
     att.Y < 8 &&
     att.X >= 0 &&
-    att.X < 8
+    att.X < 8 &&
+    posFigure[att.Y][att.X][0] != activeFigure.name[0]
       ? res.attak.push("" + att.Y + att.X)
       : res.attak.push("");
   });
-  //attak logic
 
-  // posFigure[position.Y + 1][position.X + 1] !== "none" &&
-  // position.Y + 1 >= 0 &&
-  // position.Y + 1 < 8 &&
-  // position.X + 1 >= 0 &&
-  // position.X + 1 < 8
-  //   ? res.attak.push("" + position.Y + 1 + (position.X + 1))
-  //   : res.attak.push("");
-
-  // posFigure[position.Y - 1][position.X - 1] !== "none" &&
-  // position.Y - 1 >= 0 &&
-  // position.Y - 1 < 8 &&
-  // position.X - 1 >= 0 &&
-  // position.X - 1 < 8
-  //   ? res.attak.push("" + position.Y - 1 + (position.X - 1))
-  //   : res.attak.push("");
   return res;
 };
 
-const figures = { pawn };
+let bishop = (activeFigure, posFigure, history) => {
+  let res = {
+    attak: [],
+    move: [],
+  };
+
+  let position = {
+    Y: Math.floor(activeFigure.position / 10),
+    X: activeFigure.position % 10,
+  };
+
+  let increment = 1;
+
+  while (position.X - increment >= 0) {
+    if (posFigure[position.Y][position.X - increment] == "none") {
+      res.move.push("" + position.Y + position.X - increment);
+    } else if (
+      posFigure[position.Y][position.X - increment][0] != activeFigure.name[0]
+    ) {
+      res.attak.push("" + position.Y + position.X - increment);
+      break;
+    } else break;
+
+    increment++;
+  }
+
+  increment = 1;
+
+  while (position.X + increment < 8) {
+    console.log(posFigure[position.Y][position.X + increment]);
+    if (posFigure[position.Y][position.X + increment] == "none") {
+      res.move.push("" + position.Y + (position.X + increment));
+    } else if (
+      posFigure[position.Y][position.X + increment][0] != activeFigure.name[0]
+    ) {
+      res.attak.push("" + position.Y + (position.X + increment));
+      break;
+    } else break;
+
+    increment++;
+  }
+
+  increment = 1;
+
+  while (position.Y - increment >= 0) {
+    if (posFigure[position.Y - increment][position.X] == "none") {
+      res.move.push("" + (position.Y - increment) + position.X);
+    } else if (
+      posFigure[position.Y - increment][position.X][0] != activeFigure.name[0]
+    ) {
+      res.attak.push("" + (position.Y - increment) + position.X);
+      break;
+    } else break;
+
+    increment++;
+  }
+
+  increment = 1;
+
+  while (position.Y + increment < 8) {
+    if (posFigure[position.Y + increment][position.X] == "none") {
+      res.move.push("" + (position.Y + increment) + position.X);
+    } else if (
+      posFigure[position.Y + increment][position.X][0] != activeFigure.name[0]
+    ) {
+      res.attak.push("" + (position.Y + increment) + position.X);
+      break;
+    } else break;
+
+    increment++;
+  }
+
+  return res;
+};
+
+let knight = (activeFigure, posFigure, history) => {
+  let res = {
+    attak: [],
+    move: [],
+  };
+  return res;
+};
+let rook = (activeFigure, posFigure, history) => {
+  let res = {
+    attak: [],
+    move: [],
+  };
+  return res;
+};
+let queen = (activeFigure, posFigure, history) => {
+  let res = {
+    attak: [],
+    move: [],
+  };
+  return res;
+};
+let king = (activeFigure, posFigure, history) => {
+  let res = {
+    attak: [],
+    move: [],
+  };
+  return res;
+};
+
+const figures = { pawn, bishop, knight, rook, queen, king };
 
 const getPosibleMove = (activeFigure, posFigure, history) => {
   return figures[activeFigure.name.slice(2)](activeFigure, posFigure, history);
