@@ -76,66 +76,35 @@ let bishop = (activeFigure, posFigure, history) => {
     Y: Math.floor(activeFigure.position / 10),
     X: activeFigure.position % 10,
   };
-
-  let increment = 1;
-
-  while (position.X - increment >= 0) {
-    if (posFigure[position.Y][position.X - increment] == "none") {
-      res.move.push("" + position.Y + position.X - increment);
-    } else if (
-      posFigure[position.Y][position.X - increment][0] != activeFigure.name[0]
+  let increment;
+  let XX;
+  let YY;
+  [
+    { X: 0, Y: -1 },
+    { X: 0, Y: 1 },
+    { X: -1, Y: 0 },
+    { X: 1, Y: 0 },
+  ].map((move) => {
+    increment = 1;
+    while (
+      position.X + increment * move.X >= 0 &&
+      position.X + increment * move.X < 8 &&
+      position.Y + increment * move.Y >= 0 &&
+      position.Y + increment * move.Y < 8
     ) {
-      res.attak.push("" + position.Y + position.X - increment);
-      break;
-    } else break;
+      XX = position.X + increment * move.X;
+      YY = position.Y + increment * move.Y;
 
-    increment++;
-  }
+      if (posFigure[YY][XX] == "none") {
+        res.move.push("" + YY + XX);
+      } else if (posFigure[YY][XX][0] != activeFigure.name[0]) {
+        res.attak.push("" + YY + XX);
+        break;
+      } else break;
 
-  increment = 1;
-
-  while (position.X + increment < 8) {
-    if (posFigure[position.Y][position.X + increment] == "none") {
-      res.move.push("" + position.Y + (position.X + increment));
-    } else if (
-      posFigure[position.Y][position.X + increment][0] != activeFigure.name[0]
-    ) {
-      res.attak.push("" + position.Y + (position.X + increment));
-      break;
-    } else break;
-
-    increment++;
-  }
-
-  increment = 1;
-
-  while (position.Y - increment >= 0) {
-    if (posFigure[position.Y - increment][position.X] == "none") {
-      res.move.push("" + (position.Y - increment) + position.X);
-    } else if (
-      posFigure[position.Y - increment][position.X][0] != activeFigure.name[0]
-    ) {
-      res.attak.push("" + (position.Y - increment) + position.X);
-      break;
-    } else break;
-
-    increment++;
-  }
-
-  increment = 1;
-
-  while (position.Y + increment < 8) {
-    if (posFigure[position.Y + increment][position.X] == "none") {
-      res.move.push("" + (position.Y + increment) + position.X);
-    } else if (
-      posFigure[position.Y + increment][position.X][0] != activeFigure.name[0]
-    ) {
-      res.attak.push("" + (position.Y + increment) + position.X);
-      break;
-    } else break;
-
-    increment++;
-  }
+      increment++;
+    }
+  });
 
   return res;
 };
@@ -212,18 +181,111 @@ let rook = (activeFigure, posFigure, history) => {
 
   return res;
 };
-let queen = (activeFigure, posFigure, history) => {
-  let res = {
-    attak: [],
-    move: [],
-  };
-  return res;
-};
+
 let king = (activeFigure, posFigure, history) => {
   let res = {
     attak: [],
     move: [],
   };
+
+  let position = {
+    Y: Math.floor(activeFigure.position / 10),
+    X: activeFigure.position % 10,
+  };
+
+  let attakZone = [];
+
+  posFigure.map((line, Y) => {
+    line.map((cell, X) => {
+      if (
+        cell[0] != activeFigure.name[0] &&
+        cell != "none" &&
+        cell.slice(2) != "pawn"
+      ) {
+        attakZone.push(
+          ...figures[cell.slice(2)](activeFigure, posFigure, history).move
+        );
+      }
+
+      if (cell[0] != activeFigure.name[0] && cell.slice(2) == "pawn") {
+        attakZone.push(
+          ...[
+            "" + (Y + (cell[0] == "b" ? 1 : -1)) + (X + 1),
+            "" + (Y + (cell[0] == "b" ? 1 : -1)) + (X - 1),
+          ]
+        );
+      }
+    });
+  });
+
+  attakZone = [...new Set(attakZone)];
+
+  [
+    { X: position.X - 1, Y: position.X - 1 },
+    { X: position.X + 1, Y: position.X + 1 },
+    { X: position.X - 1, Y: position.X + 1 },
+    { X: position.X + 1, Y: position.X - 1 },
+    { X: position.X + 0, Y: position.X - 1 },
+    { X: position.X + 0, Y: position.X + 1 },
+    { X: position.X - 1, Y: position.X + 0 },
+    { X: position.X + 1, Y: position.X + 0 },
+  ].map((move) => {
+    if (!attakZone.includes("" + move.Y + move.X)) {
+      posFigure[move.Y][move.X] == "none"
+        ? res.move.push("" + move.Y + move.X)
+        : posFigure[move.Y][move.X][0] != activeFigure.name[0]
+        ? res.attak.push("" + move.Y + move.X)
+        : res.move.push("");
+    }
+  });
+
+  return res;
+};
+
+let queen = (activeFigure, posFigure, history) => {
+  let res = {
+    attak: [],
+    move: [],
+  };
+
+  let position = {
+    Y: Math.floor(activeFigure.position / 10),
+    X: activeFigure.position % 10,
+  };
+  let increment;
+  let XX;
+  let YY;
+  [
+    { X: -1, Y: -1 },
+    { X: 1, Y: 1 },
+    { X: -1, Y: 1 },
+    { X: 1, Y: -1 },
+    { X: 0, Y: -1 },
+    { X: 0, Y: 1 },
+    { X: -1, Y: 0 },
+    { X: 1, Y: 0 },
+  ].map((move) => {
+    increment = 1;
+    while (
+      position.X + increment * move.X >= 0 &&
+      position.X + increment * move.X < 8 &&
+      position.Y + increment * move.Y >= 0 &&
+      position.Y + increment * move.Y < 8
+    ) {
+      XX = position.X + increment * move.X;
+      YY = position.Y + increment * move.Y;
+
+      if (posFigure[YY][XX] == "none") {
+        res.move.push("" + YY + XX);
+      } else if (posFigure[YY][XX][0] != activeFigure.name[0]) {
+        res.attak.push("" + YY + XX);
+        break;
+      } else break;
+
+      increment++;
+    }
+  });
+
   return res;
 };
 

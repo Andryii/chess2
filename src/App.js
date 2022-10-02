@@ -1,11 +1,7 @@
 import { useMemo, useState } from "react";
 import AppStyle from "./App.module.css";
 import Board from "./Board/Board";
-import {
-  ActiveFigureContext,
-  HistoryContext,
-  PosibleCellContext,
-} from "./context";
+import { ActiveFigureContext, HistoryContext } from "./context";
 import getPosibleMove from "./API/getPosibleMove";
 function App() {
   /*Стандартное положение всех фигур 
@@ -63,7 +59,7 @@ function App() {
     ["none", "none", "none", "none", "none", "none", "none", "none"],
     ["none", "b_knight", "none", "none", "none", "none", "none", "none"],
     ["none", "w_pawn", "w_pawn", "w_pawn", "w_pawn", "w_pawn", "none", "none"],
-    ["none", "w_pawn", "b_pawn", "b_rook", "none", "w_pawn", "none", "none"],
+    ["none", "w_pawn", "b_pawn", "b_bishop", "none", "w_pawn", "none", "none"],
     ["none", "w_pawn", "none", "none", "none", "w_pawn", "none", "none"],
     ["none", "w_pawn", "w_pawn", "w_pawn", "w_pawn", "none", "none", "none"],
     ["none", "none", "none", "none", "none", "none", "none", "none"],
