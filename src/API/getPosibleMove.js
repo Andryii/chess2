@@ -146,6 +146,30 @@ let knight = (activeFigure, posFigure, history) => {
     attak: [],
     move: [],
   };
+  let position = {
+    Y: Math.floor(activeFigure.position / 10),
+    X: activeFigure.position % 10,
+  };
+
+  [
+    { X: position.X + 2, Y: position.Y - 1 },
+    { X: position.X + 2, Y: position.Y + 1 },
+    { X: position.X - 2, Y: position.Y - 1 },
+    { X: position.X - 2, Y: position.Y + 1 },
+    { X: position.X + 1, Y: position.Y + 2 },
+    { X: position.X - 1, Y: position.Y + 2 },
+    { X: position.X + 1, Y: position.Y - 2 },
+    { X: position.X - 1, Y: position.Y - 2 },
+  ].map((move) => {
+    if (move.X >= 0 && move.X < 8 && move.Y >= 0 && move.Y < 8) {
+      posFigure[move.Y][move.X] == "none"
+        ? res.move.push("" + move.Y + move.X)
+        : posFigure[move.Y][move.X][0] != activeFigure.name[0]
+        ? res.attak.push("" + move.Y + move.X)
+        : res.move.push("");
+    }
+  });
+
   return res;
 };
 let rook = (activeFigure, posFigure, history) => {

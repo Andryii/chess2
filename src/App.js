@@ -61,9 +61,9 @@ function App() {
   //Текущая ситуация на поле
   const [posFigure, setPosFigure] = useState([
     ["none", "none", "none", "none", "none", "none", "none", "none"],
-    ["none", "none", "none", "none", "none", "none", "none", "none"],
+    ["none", "b_knight", "none", "none", "none", "none", "none", "none"],
     ["none", "w_pawn", "w_pawn", "w_pawn", "w_pawn", "w_pawn", "none", "none"],
-    ["none", "w_pawn", "b_pawn", "b_bishop", "none", "w_pawn", "none", "none"],
+    ["none", "w_pawn", "b_pawn", "b_knight", "none", "w_pawn", "none", "none"],
     ["none", "w_pawn", "none", "none", "none", "w_pawn", "none", "none"],
     ["none", "w_pawn", "w_pawn", "w_pawn", "w_pawn", "none", "none", "none"],
     ["none", "none", "none", "none", "none", "none", "none", "none"],
