@@ -10,7 +10,7 @@ const Cell = ({ cellsize, parity, figure, id, stylemove }) => {
     CellStyle[stylemove],
   ]);
 
-  useEffect(() => {
+  useMemo(() => {
     setCellClassName([...cellClassName, CellStyle[stylemove]]);
 
     if (

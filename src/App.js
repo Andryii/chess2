@@ -1,8 +1,12 @@
 import { useMemo, useState } from "react";
 import AppStyle from "./App.module.css";
 import Board from "./Board/Board";
-import { ActiveFigureContext, PosibleCellContext } from "./context";
-
+import {
+  ActiveFigureContext,
+  HistoryContext,
+  PosibleCellContext,
+} from "./context";
+import getPosibleMove from "./API/getPosibleMove";
 function App() {
   const [posFigure, setPosFigure] = useState([
     [
@@ -28,7 +32,7 @@ function App() {
     ["none", "none", "none", "none", "none", "none", "none", "none"],
     ["none", "none", "none", "none", "none", "none", "none", "none"],
     ["none", "none", "none", "none", "none", "none", "none", "none"],
-    ["none", "none", "none", "none", "none", "none", "none", "none"],
+    ["b_pawn", "none", "none", "none", "none", "none", "none", "none"],
     [
       "w_pawn",
       "w_pawn",
@@ -51,13 +55,35 @@ function App() {
     ],
   ]);
 
+  /*
+  {
+    position: id,
+    name: figure,
+  }
+
+    Хранит активную фигуру для хода
+  */
   const [activeFigure, setActiveFigure] = useState("none");
 
+  /*
+    [
+      {
+        start: "30",
+        end: "21"
+      }
+    ]
+
+    Хранит полную историю ходов
+  */
+  const [history, setHistory] = useState([]);
+
+  //Хранит возможные пути движений для конкретной выбраной пешки
   const [posibleCell, setPosibleCell] = useState({
     attak: [],
     move: [],
   });
 
+  //Заполняет или очищает возможные пути для хода
   useMemo(() => {
     if (activeFigure == "none") {
       setPosibleCell({
@@ -65,23 +91,22 @@ function App() {
         move: [],
       });
     } else {
-      setPosibleCell({
-        attak: [],
-        move: [],
-      });
+      setPosibleCell(getPosibleMove(activeFigure, posFigure, history));
     }
   }, [activeFigure]);
 
   return (
     <div className={AppStyle.App}>
-      <ActiveFigureContext.Provider value={{ activeFigure, setActiveFigure }}>
-        <Board
-          posibleCell={posibleCell}
-          size={posFigure.length}
-          cell={100}
-          posFigure={posFigure}
-        />
-      </ActiveFigureContext.Provider>
+      <HistoryContext.Provider value={{ history, setHistory }}>
+        <ActiveFigureContext.Provider value={{ activeFigure, setActiveFigure }}>
+          <Board
+            posibleCell={posibleCell}
+            size={posFigure.length}
+            cell={100}
+            posFigure={posFigure}
+          />
+        </ActiveFigureContext.Provider>
+      </HistoryContext.Provider>
     </div>
   );
 }
