@@ -9,7 +9,7 @@ let pawn = (activeFigure, posFigure, history) => {
   };
 
   //move logic
-  if (position.Y !== (activeFigure.name[0] == "b" ? 1 : 7)) {
+  if (position.Y !== (activeFigure.name[0] == "b" ? 1 : 6)) {
     posFigure[position.Y + (activeFigure.name[0] == "b" ? 1 : -1)][
       position.X
     ] == "none"
@@ -197,13 +197,46 @@ let king = (activeFigure, posFigure, history) => {
 
   posFigure.map((line, Y) => {
     line.map((cell, X) => {
+      // логика для всех фигур кроме пешки и короля
       if (
         cell[0] != activeFigure.name[0] &&
         cell != "none" &&
-        cell.slice(2) != "pawn"
+        cell.slice(2) != "pawn" &&
+        cell.slice(2) != "king"
       ) {
         attakZone.push(
-          ...figures[cell.slice(2)](activeFigure, posFigure, history).move
+          ...figures[cell.slice(2)](
+            {
+              position: "" + Y + X,
+              name: cell,
+            },
+            posFigure.map((el) =>
+              el.map((ell) => {
+                if (ell == "none") {
+                  return "none";
+                } else {
+                  return activeFigure.name[0] + "_pawn";
+                }
+              })
+            ),
+            history
+          ).move,
+          ...figures[cell.slice(2)](
+            {
+              position: "" + Y + X,
+              name: cell,
+            },
+            posFigure.map((el) =>
+              el.map((ell) => {
+                if (ell == "none") {
+                  return "none";
+                } else {
+                  return activeFigure.name[0] + "_pawn";
+                }
+              })
+            ),
+            history
+          ).attak
         );
       }
 
@@ -215,22 +248,45 @@ let king = (activeFigure, posFigure, history) => {
           ]
         );
       }
+
+      if (cell[0] != activeFigure.name[0] && cell.slice(2) == "king") {
+        attakZone.push(
+          ...[
+            "" + (Y + 1) + (X + 1),
+            "" + (Y + 1) + (X - 1),
+            "" + (Y - 1) + (X + 1),
+            "" + (Y - 1) + (X - 1),
+            "" + (Y + 1) + X,
+            "" + (Y - 1) + X,
+            "" + Y + (X + 1),
+            "" + Y + (X - 1),
+          ]
+        );
+      }
     });
   });
 
   attakZone = [...new Set(attakZone)];
 
   [
-    { X: position.X - 1, Y: position.X - 1 },
-    { X: position.X + 1, Y: position.X + 1 },
-    { X: position.X - 1, Y: position.X + 1 },
-    { X: position.X + 1, Y: position.X - 1 },
-    { X: position.X + 0, Y: position.X - 1 },
-    { X: position.X + 0, Y: position.X + 1 },
-    { X: position.X - 1, Y: position.X + 0 },
-    { X: position.X + 1, Y: position.X + 0 },
+    { X: position.X - 1, Y: position.Y - 1 },
+    { X: position.X + 1, Y: position.Y + 1 },
+    { X: position.X - 1, Y: position.Y + 1 },
+    { X: position.X + 1, Y: position.Y - 1 },
+    { X: position.X + 0, Y: position.Y - 1 },
+    { X: position.X + 0, Y: position.Y + 1 },
+    { X: position.X - 1, Y: position.Y + 0 },
+    { X: position.X + 1, Y: position.Y + 0 },
   ].map((move) => {
-    if (!attakZone.includes("" + move.Y + move.X)) {
+    if (
+      !attakZone.some((el) => {
+        return "" + move.Y + move.X == el;
+      }) &&
+      move.Y >= 0 &&
+      move.Y < 8 &&
+      move.X >= 0 &&
+      move.X < 8
+    ) {
       posFigure[move.Y][move.X] == "none"
         ? res.move.push("" + move.Y + move.X)
         : posFigure[move.Y][move.X][0] != activeFigure.name[0]
